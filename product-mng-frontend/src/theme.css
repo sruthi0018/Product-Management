@@ -1,0 +1,27 @@
+:root {
+  /* --primary-color: #1e3a8a;     */
+  --secondary-color: #facc15;
+  --text-color: #ffffff;
+  --font-family: 'Arial', sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--primary-color);
+  color: var(--text-color);
+}
+
+.btn {
+  background-color: var(--secondary-color);
+  border: none;
+  padding: 10px 16px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #000;
+}
+
+.btn:hover {
+  background-color: #fbbf24;
+}
