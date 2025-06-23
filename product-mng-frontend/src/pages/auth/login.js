@@ -1,17 +1,20 @@
-// SignupPage.jsx
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+
 import * as Yup from 'yup';
+import { useForm } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useAuth } from '../../context/auth';
 
 
 const schema = Yup.object().shape({
-  name: Yup.string().required('Name is required').min(2),
   email: Yup.string().email('Invalid email').required('Email is required'),
   password: Yup.string().required('Password is required').min(6),
 });
 
-export default function SignupPage() {
+export default function LoginPage() {
+    const {login} = useAuth()
+    const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
@@ -26,26 +29,23 @@ export default function SignupPage() {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const onSubmit = (data) => {
-    console.log('Form Submitted:', data);
-  
-  };
+const onSubmit = async (formData) => {
+  const res = await login(formData);
+  if (res.success) {
+    navigate('/home'); 
+    alert('SignIn successful');
+  } else {
+    alert(res.message);
+  }
+};
 
   return (
     <div style={{ ...styles.container, flexDirection: isMobile ? 'column' : 'row' }}>
-     
+      {/* Left - Form */}
       <div style={{ ...styles.leftPanel, width: isMobile ? '100%' : '50%' }}>
         <div style={styles.formBox}>
-          <h2 style={styles.title}>Create an Account</h2>
+          <h2 style={styles.title}>Sign In To Your Account</h2>
           <form onSubmit={handleSubmit(onSubmit)} style={styles.form}>
-            <input
-              type="text"
-              placeholder="Name"
-              {...register('name')}
-              style={styles.input}
-            />
-            {errors.name && <span style={styles.error}>{errors.name.message}</span>}
-
             <input
               type="email"
               placeholder="Email"
@@ -62,19 +62,20 @@ export default function SignupPage() {
             />
             {errors.password && <span style={styles.error}>{errors.password.message}</span>}
 
-            <button type="submit" style={styles.button}>SIGN UP</button>
+            <button type="submit" style={styles.button}>SIGN IN</button>
           </form>
-
         </div>
       </div>
 
-    
+      {/* Right - Image and Text */}
       {!isMobile && (
         <div style={styles.rightPanel}>
           <div style={styles.overlay}>
-            <h2 style={styles.overlayTitle}>Welcome Back!</h2>
-            <p style={styles.overlayText}>To keep connected with us please login with your personal info.</p>
-            <button style={styles.btn}>SIGN IN </button>
+            <h2 style={styles.overlayTitle}>Hello Friend!</h2>
+            <p style={styles.overlayText}>Enter your personal details and<br/> start your journey with us.</p>
+            <button style={styles.btn} onClick={() => window.location.href = '/'}>
+              SIGN UP
+            </button>
           </div>
         </div>
       )}
@@ -82,7 +83,7 @@ export default function SignupPage() {
   );
 }
 
-
+// Styles
 const styles = {
   container: {
     display: 'flex',
@@ -104,8 +105,7 @@ const styles = {
     fontSize: '32px',
     fontWeight: 'bold',
     marginBottom: '30px',
-    // color: '#1e3a8a',
-    color:'#facc15'
+    color: '#facc15',
   },
   form: {
     display: 'flex',
@@ -126,43 +126,30 @@ const styles = {
   },
   button: {
     padding: '12px',
-    width:'300px',
-    backgroundColor: '#facc15', 
+    width: '300px',
+    backgroundColor: '#facc15',
     color: '#000',
     fontSize: '16px',
     fontWeight: 'bold',
     border: 'none',
     borderRadius: '50px',
-    alignSelf:"center",
+    alignSelf: 'center',
     cursor: 'pointer',
     transition: 'background 0.3s ease',
   },
-  btn: {
-    padding: '12px',
-    width:'250px',
-    // backgroundColor: '#facc15', 
+ btn: {
+    padding: '12px 32px',
+    backgroundColor: '#facc15',
     color: '#000',
     fontSize: '16px',
     fontWeight: 'bold',
     border: 'none',
     borderRadius: '50px',
-    alignSelf:"center",
     cursor: 'pointer',
-    transition: 'background 0.3s ease',
-  },
-  loginText: {
-    marginTop: '20px',
-    textAlign: 'center',
-    fontSize: '14px',
-    color: '#555',
-  },
-  link: {
-    color: '#1e3a8a',
-    textDecoration: 'underline',
   },
   rightPanel: {
     width: '50%',
-    backgroundColor:"#1e3a8a",
+    backgroundColor: '#1e3a8a',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     position: 'relative',
