@@ -45,16 +45,23 @@ const slice = createSlice({
         state.products[index] = updated;
       }
     },
+    clearSingleProduct(state) {
+  state.product = null;
+}
+
   },
 });
 
+
 export default slice.reducer;
+export const { clearSingleProduct } = slice.actions;
 
 export function CreateProduct(data) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post(`${BASE_URL}/api/products`, data);
+      const response = await axios.post(`${BASE_URL}/api/product`, data);
+      console.log("crpro",response.data)
       dispatch(slice.actions.createProductSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error.message));
@@ -77,10 +84,12 @@ export function GetAllProducts() {
 }
 
 export function GetProductById(id) {
+  console.log("iddd",id)
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`${BASE_URL}/api/products/${id}`);
+      const response = await axios.get(`${BASE_URL}/api/product/${id}`);
+      console.log("getprod",response)
       dispatch(slice.actions.getProductSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error.message));
@@ -106,7 +115,7 @@ export function UpdateProduct(id, data) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.put(`${BASE_URL}/api/products/${id}`, data);
+      const response = await axios.put(`${BASE_URL}/api/product/${id}`, data);
       dispatch(slice.actions.updateProductSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error.message));

@@ -43,7 +43,8 @@ export function CreateSubCategory(data) {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.post(`${BASE_URL}/api/subcategory`, data);
-      dispatch(slice.actions.createSubCategorySuccess(response.data));
+      console.log("createsub",response.data.subCategory)
+      dispatch(slice.actions.createSubCategorySuccess(response.data.subCategory));
     } catch (error) {
       dispatch(slice.actions.hasError(error.message));
       throw error;
@@ -56,7 +57,7 @@ export function GetAllSubCategories() {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.get(`${BASE_URL}/api/subcategory`);
-      console.log(response, "rrr");
+      console.log(response.data, "sss");
       dispatch(slice.actions.getSubCategoriesSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error.message));

@@ -1,85 +1,290 @@
+import React, { useEffect, useState } from "react";
+import { useForm, useFieldArray } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { CreateProduct, UpdateProduct, GetProductById, GetAllProducts } from "../../redux/slices/product";
+import { GetAllSubCategories } from "../../redux/slices/subCategory";
+import { UPLOAD_URL } from "../../constants/constants";
 
-import React, { useState } from 'react';
+export default function AddProductModal({ open, onClose, productId }) {
+  const dispatch = useDispatch();
+  const { subCategories } = useSelector((state) => state.subCategory);
+  const { product } = useSelector((state) => state.products);
 
-export function AddProductModal({ onClose, onSubmit, subCategories }) {
-  const [variants, setVariants] = useState([{ ram: '', price: '', qty: '' }]);
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    setValue,
+  } = useForm({
+    defaultValues: {
+      title: "",
+      description: "",
+      subCategoryId: "",
+      variants: [{ ram: "", price: "", qty: "" }],
+    },
+  });
 
-  const handleVariantChange = (index, field, value) => {
-    const newVariants = [...variants];
-    newVariants[index][field] = value;
-    setVariants(newVariants);
+  const { fields, append } = useFieldArray({
+    control,
+    name: "variants",
+  });
+
+  const [images, setImages] = useState([]);
+
+ useEffect(() => {
+    dispatch(GetAllSubCategories());
+  }, [dispatch]);
+
+
+  useEffect(() => {
+    if (productId) {
+      dispatch(GetProductById(productId));
+    }
+  }, [productId, dispatch]);
+
+  useEffect(() => {
+    if (productId && product?._id === productId) {
+      reset({
+        title: product.title,
+        description: product.description,
+        subCategoryId: product.subCategoryId?._id || "",
+        variants: product.variants,
+        // image:product.image || []
+      });
+      setImages(product.image || []);
+    }
+  }, [productId, product, reset]);
+
+  if (!open) return null;
+
+  const handleImageChange = (e) => {
+    setImages([...e.target.files]);
   };
 
-  const addVariant = () => {
-    setVariants([...variants, { ram: '', price: '', qty: '' }]);
-  };
+  console.log("Proid",productId)
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const product = {
-      title: e.target.title.value,
-      description: e.target.description.value,
-      subCategoryId: e.target.subCategoryId.value,
-      variants
-    };
-    onSubmit(product);
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("subCategoryId", data.subCategoryId);
+    formData.append("variants", JSON.stringify(data.variants));
+    images.forEach((img) => formData.append("image", img));
+
+    if (productId) {
+      const id= productId
+      await dispatch(UpdateProduct( id, formData ));
+        await  dispatch(GetAllProducts());
+      
+    } else {
+      await dispatch(CreateProduct(formData));
+        await  dispatch(GetAllProducts());
+
+    }
+
     onClose();
   };
 
   return (
     <div style={styles.backdrop}>
       <div style={styles.modal}>
-        <h3>Add Product</h3>
-        <form onSubmit={handleSubmit}>
-          <input name="title" placeholder="Product Title" style={styles.input} required />
-          <textarea name="description" placeholder="Description" style={styles.input} />
-          <select name="subCategoryId" required style={styles.input}>
-            <option value="">Select Subcategory</option>
-            {subCategories.map((sub) => (
-              <option key={sub._id} value={sub._id}>{sub.name}</option>
-            ))}
-          </select>
-          <h4>Variants</h4>
-          {variants.map((variant, index) => (
-            <div key={index}>
+          <div style={styles.scrollArea}>
+        <h3>{productId ? "Edit Product" : "Add Product"}</h3>
+        <form onSubmit={handleSubmit(onSubmit)} style={styles.form}>
+        
+          <div style={styles.row}>
+            <label style={styles.label}>Title</label>
+            <input {...register("title", { required: true })} style={styles.input} />
+          </div>
+
+       
+          <h4 style={styles.subHeading}>Variants</h4>
+          {fields.map((field, index) => (
+            <div key={field.id} style={styles.row}>
               <input
                 placeholder="RAM"
-                value={variant.ram}
-                onChange={(e) => handleVariantChange(index, 'ram', e.target.value)}
-                style={styles.input}
+                {...register(`variants.${index}.ram`)}
+                style={styles.inputSmall}
               />
               <input
                 placeholder="Price"
                 type="number"
-                value={variant.price}
-                onChange={(e) => handleVariantChange(index, 'price', e.target.value)}
-                style={styles.input}
+                {...register(`variants.${index}.price`, { valueAsNumber: true })}
+                style={styles.inputSmall}
               />
               <input
                 placeholder="Quantity"
                 type="number"
-                value={variant.qty}
-                onChange={(e) => handleVariantChange(index, 'qty', e.target.value)}
-                style={styles.input}
+                {...register(`variants.${index}.qty`, { valueAsNumber: true })}
+                style={styles.inputSmall}
               />
             </div>
           ))}
-          <button type="button" onClick={addVariant} style={{ ...styles.submit, marginTop: 10 }}>Add Variant</button>
-          <div style={styles.actions}>
-            <button type="button" onClick={onClose} style={styles.cancel}>Cancel</button>
-            <button type="submit" style={styles.submit}>Add</button>
+          <button type="button" onClick={() => append({ ram: "", price: "", qty: "" })} style={styles.button}>
+            Add Variant
+          </button>
+
+          {/* Subcategory */}
+          <div style={styles.row}>
+            <label style={styles.label}>Subcategory</label>
+            <select {...register("subCategoryId", { required: true })} style={styles.input}>
+              <option value="">Select Subcategory</option>
+              {subCategories.map((sub) => (
+                <option key={sub._id} value={sub._id}>
+                  {sub.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Description */}
+          <div style={styles.row}>
+            <label style={styles.label}>Description</label>
+            <textarea {...register("description")} style={styles.textarea} />
+          </div>
+
+          {/* Image upload */}
+          {/* <div style={styles.row}>
+            <label style={styles.label}>Images</label>
+            <input type="file" multiple accept="image/*" onChange={handleImageChange} />
+          </div> */}
+          <div style={styles.row}>
+  <label style={styles.label}>Images</label>
+  <input type="file" multiple accept="image/*" onChange={handleImageChange} />
+</div>
+
+{/* Show existing images in edit mode */}
+{productId && Array.isArray(images) && images.length > 0 && (
+  <div style={styles.imagePreviewRow}>
+    {images.map((img, idx) => (
+      <img
+        key={idx}
+        src={typeof img === "string" ? `${UPLOAD_URL}${img}` : URL.createObjectURL(img)}
+        alt={`product-${idx}`}
+        style={styles.previewImage}
+      />
+    ))}
+  </div>
+)}
+
+
+          {/* Actions */}
+          <div style={{ ...styles.row, justifyContent: "flex-end" }}>
+            <button type="button" onClick={onClose} style={styles.cancel}>
+              Cancel
+            </button>
+            <button type="submit" style={styles.submit}>
+              {productId ? "Update" : "Add"}
+            </button>
           </div>
         </form>
+      </div>
       </div>
     </div>
   );
 }
-
 const styles = {
-  backdrop: { position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 100 },
-  modal: { background: '#fff', padding: 20, borderRadius: 10, width: 300, margin: '100px auto' },
-  input: { width: '100%', padding: 10, margin: '10px 0', borderRadius: 6, border: '1px solid #ccc' },
-  actions: { display: 'flex', justifyContent: 'flex-end', gap: 10 },
-  cancel: { padding: '6px 12px' },
-  submit: { padding: '6px 12px', backgroundColor: '#facc15', border: 'none', borderRadius: 6 }
+   scrollArea: {
+    padding: 20,
+    overflowY: 'auto',
+    maxHeight: '70vh', // adjust as needed to leave space for header/footer
+  },
+    imagePreviewRow: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: 10,
+    // marginTop: 10,
+    paddingLeft: "30%", // match label alignment
+  },
+  previewImage: {
+    width: 70,
+    height: 70,
+    objectFit: "cover",
+    border: "1px solid #ccc",
+    borderRadius: 6,
+  },
+  backdrop: {
+    position: 'fixed',
+    inset: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    zIndex: 100,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modal: {
+    background: '#fff',
+    borderRadius: 10,
+    width: 700,
+    maxHeight: '80vh',
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: 20,
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 15,
+  },
+  row: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 10,
+  },
+  label: {
+    width: '30%',
+    fontWeight: 'bold',
+  },
+  input: {
+    flex: 1,
+    padding: 10,
+    borderRadius: 6,
+    border: '1px solid #ccc',
+  },
+  textarea: {
+    flex: 1,
+    padding: 10,
+    height: 80,
+    borderRadius: 6,
+    border: '1px solid #ccc',
+  },
+  inputSmall: {
+    flex: 1,
+    padding: 8,
+    borderRadius: 6,
+    border: '1px solid #ccc',
+  },
+  subHeading: {
+    fontSize: '16px',
+    fontWeight: 'bold',
+    marginTop: 10,
+    marginBottom: -5,
+  },
+  button: {
+    alignSelf: 'flex-start',
+    padding: '8px 16px',
+    backgroundColor: '#e2e8f0',
+    border: 'none',
+    borderRadius: 6,
+    cursor: 'pointer',
+    marginBottom: 10,
+  },
+  cancel: {
+    padding: '8px 16px',
+    backgroundColor: '#ccc',
+    border: 'none',
+    borderRadius: 6,
+    cursor: 'pointer',
+  },
+  submit: {
+    padding: '8px 16px',
+    backgroundColor: '#facc15',
+    border: 'none',
+    borderRadius: 6,
+    fontWeight: 'bold',
+    cursor: 'pointer',
+  },
 };

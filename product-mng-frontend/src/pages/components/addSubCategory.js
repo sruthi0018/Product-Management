@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch } from 'react-redux';
-import { CreateSubCategory } from '../../redux/slices/subCategory';
+import { CreateSubCategory, GetAllSubCategories } from '../../redux/slices/subCategory';
 
 
 export function AddSubCategoryModal({ open, onClose, categories }) {
@@ -24,6 +24,8 @@ export function AddSubCategoryModal({ open, onClose, categories }) {
   const onSubmit = async (data) => {
     try {
       await dispatch(CreateSubCategory(data));
+       await dispatch(GetAllSubCategories());
+      
       reset();  
       onClose();
     } catch (error) {

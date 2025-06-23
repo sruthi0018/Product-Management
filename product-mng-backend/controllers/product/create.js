@@ -8,7 +8,6 @@ exports.createProduct = async (req, res) => {
 console.log("Body:", req.body);
 
 
-    // Parse variants from string (FormData sends it as string)
     if (typeof data.variants === 'string') {
       data.variants = JSON.parse(data.variants);
     }
