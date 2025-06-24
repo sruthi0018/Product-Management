@@ -19,7 +19,7 @@ export default function ProductList({ products }) {
 
   useEffect(() => {
     dispatch(GetWishlist(userId));
-  }, [dispatch]);
+  }, [userId,dispatch]);
 
   useEffect(() => {
     dispatch(GetAllCategories());
