@@ -5,6 +5,7 @@ exports.updateProduct = async (req, res) => {
     const { id } = req.params;
     const updates = req.body;
     if (typeof updates.variants === 'string') updates.variants = JSON.parse(updates.variants);
+
     if (req.files && req.files.length > 0) {
       updates.image = req.files.map(file => `/uploads/products/${file.filename}`);
     }

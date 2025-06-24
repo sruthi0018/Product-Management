@@ -8,9 +8,9 @@ const upload = require('../middleware/upload');
 
 
 router.post('/',upload.array('image', 6),  createProduct);
+router.put('/:id', upload.array('image', 6),  updateProduct);
 router.get('/',getProducts);
 router.get('/:id', getProductById); 
-router.put('/:id', upload.array('image', 6),  updateProduct);
 
 
 

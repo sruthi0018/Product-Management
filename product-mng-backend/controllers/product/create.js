@@ -12,7 +12,7 @@ console.log("Body:", req.body);
       data.variants = JSON.parse(data.variants);
     }
 
-    // Attach image path if available
+   
    if (req.files && req.files.length > 0) {
       data.image = req.files.map(file => `/uploads/products/${file.filename}`);
     }
