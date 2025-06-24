@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth } from "../../context/auth";
 import { GetWishlist, ToggleWishlist } from "../../redux/slices/wishList";
-import { UPLOAD_URL } from "../../constants/constants";
+
 
 export default function WishlistSidebar({ isOpen, onClose }) {
   const dispatch = useDispatch();
@@ -35,7 +35,7 @@ export default function WishlistSidebar({ isOpen, onClose }) {
           <div key={item._id} style={styles.productItem}>
             <img
               src={
-                UPLOAD_URL +
+                process.env.REACT_APP_UPLOAD_URL +
                 (Array.isArray(item.image) ? item.image[0] : item.image)
               }
               alt={item.title}

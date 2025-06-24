@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { BASE_URL } from "../../constants/constants";
 
 // const BASE_URL = "http://localhost:5000";
 
@@ -43,7 +42,7 @@ export function CreateCategory(data) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post(`${BASE_URL}/api/category`, data);
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/category`, data);
       console.log(response.data, "createcat");
       dispatch(slice.actions.createCategorySuccess(response.data.category));
     } catch (error) {
@@ -57,7 +56,7 @@ export function GetAllCategories() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`${BASE_URL}/api/category`);
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/category`);
       console.log(response.data, "ccc");
       dispatch(slice.actions.getCategoriesSuccess(response.data));
     } catch (error) {

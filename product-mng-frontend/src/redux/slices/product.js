@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { BASE_URL } from "../../constants/constants";
+
 
 // const BASE_URL = "http://localhost:5000";
 
@@ -64,7 +64,7 @@ export function CreateProduct(data) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post(`${BASE_URL}/api/product`, data);
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/product`, data);
       console.log("crpro",response.data)
       dispatch(slice.actions.createProductSuccess(response.data));
     } catch (error) {
@@ -77,7 +77,7 @@ export function CreateProduct(data) {
 export const GetAllProducts = (params) => async (dispatch) => {
  dispatch(slice.actions.startLoading());
   try {
-    const response = await axios.get(`${BASE_URL}/api/product`, { params });
+    const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/product`, { params });
     console.log("gtp",response)
  dispatch(slice.actions.getProductsSuccess(response.data));
   } catch (error) {
@@ -91,7 +91,7 @@ export function GetProductById(id) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`${BASE_URL}/api/product/${id}`);
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/product/${id}`);
       console.log("getprod",response)
       dispatch(slice.actions.getProductSuccess(response.data));
     } catch (error) {
@@ -118,7 +118,7 @@ export function UpdateProduct(id, data) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.put(`${BASE_URL}/api/product/${id}`, data);
+      const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/api/product/${id}`, data);
       dispatch(slice.actions.updateProductSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error.message));

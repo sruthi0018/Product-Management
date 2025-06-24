@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import { BASE_URL } from '../constants/constants';
+
 
 // const BASE_URL = "http://localhost:5000";
 
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (formData) => {
     try {
-      const res = await axios.post(`${BASE_URL}/api/auth/login`, formData);
+      const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/auth/login`, formData);
       const { token, user } = res.data;
       setUser(user);
       setToken(token);
@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (formData) => {
     try {
-      const res = await axios.post(`${BASE_URL}/api/auth/signup`, formData);
+      const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/auth/signup`, formData);
       return { success: true, message: res.data.message };
     } catch (err) {
       return { success: false, message: err.response?.data?.message || 'Signup failed' };

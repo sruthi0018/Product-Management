@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { UPLOAD_URL } from "../../constants/constants";
 import { GetWishlist, ToggleWishlist } from "../../redux/slices/wishList";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth } from "../../context/auth";
@@ -57,7 +56,7 @@ export default function ProductCard({ product }) {
 
       {productImage && (
         <img
-          src={`${UPLOAD_URL}${productImage}`}
+          src={`${process.env.REACT_APP_UPLOAD_URL}${productImage}`}
           alt={product.title}
           style={{
             width: "100%",

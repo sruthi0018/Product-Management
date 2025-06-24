@@ -8,7 +8,7 @@ import {
   GetAllProducts,
 } from "../../redux/slices/product";
 import { GetAllSubCategories } from "../../redux/slices/subCategory";
-import { UPLOAD_URL } from "../../constants/constants";
+
 
 export default function AddProductModal({ open, onClose, productId }) {
   const dispatch = useDispatch();
@@ -173,7 +173,7 @@ export default function AddProductModal({ open, onClose, productId }) {
                     key={idx}
                     src={
                       typeof img === "string"
-                        ? `${UPLOAD_URL}${img}`
+                        ? `${process.env.REACT_APP_UPLOAD_URL}${img}`
                         : URL.createObjectURL(img)
                     }
                     alt={`product-${idx}`}

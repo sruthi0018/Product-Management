@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { BASE_URL } from "../../constants/constants";
+
 
 // const BASE_URL = "http://localhost:5000";
 
@@ -50,7 +50,7 @@ export function GetWishlist(userId) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`${BASE_URL}/api/wishlist/${userId}`);
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/wishlist/${userId}`);
       console.log("wishhhh", response.data);
       dispatch(slice.actions.getWishlistSuccess(response.data.products));
     } catch (error) {
@@ -63,7 +63,7 @@ export function ToggleWishlist(userId, productId) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      await axios.post(`${BASE_URL}/api/wishlist/${userId}/${productId}`);
+      await axios.post(`${process.env.REACT_APP_BASE_URL}/api/wishlist/${userId}/${productId}`);
       dispatch(slice.actions.toggleWishlistSuccess(productId));
     } catch (error) {
       dispatch(slice.actions.hasError(error.message));

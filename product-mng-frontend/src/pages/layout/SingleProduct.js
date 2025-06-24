@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { clearSingleProduct, GetProductById } from "../../redux/slices/product";
-import { UPLOAD_URL } from "../../constants/constants";
 import { FaHeart } from "react-icons/fa";
 import AddProductModal from "../components/addProduct";
 import { GetWishlist, ToggleWishlist } from "../../redux/slices/wishList";
@@ -54,7 +53,7 @@ export default function SingleProduct() {
     return <div style={styles.loading}>Loading product...</div>;
   }
 
-  const mainImage = selectedImage ? UPLOAD_URL + selectedImage : "";
+  const mainImage = selectedImage ? process.env.REACT_APP_UPLOAD_URL + selectedImage : "";
 
   return (
     <div style={styles.container}>
@@ -64,7 +63,7 @@ export default function SingleProduct() {
           {product.image?.map((img, idx) => (
             <img
               key={idx}
-              src={UPLOAD_URL + img}
+              src={process.env.REACT_APP_UPLOAD_URL + img}
               alt={`sub-${idx}`}
               onClick={() => setSelectedImage(img)}
               style={{
