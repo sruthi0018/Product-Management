@@ -8,15 +8,12 @@ exports.getProducts = async (req, res) => {
     if (search) query.title = new RegExp(search, "i");
     if (subCategoryId) query.subCategoryId = subCategoryId;
 
-    const products = await product
-      .find(query)
-      .skip((page - 1) * limit)
-      .limit(parseInt(limit));
-    console.log("products", products);
-    res.json(products);
+    const skip = (page - 1) * limit;
+    const total = await product.countDocuments(query);
+    const products = await product.find(query).skip(skip).limit(parseInt(limit));
+
+    res.json({ products, total });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Error fetching products", error: err.message });
+    res.status(500).json({ message: "Error fetching products", error: err.message });
   }
 };

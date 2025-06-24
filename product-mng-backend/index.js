@@ -7,6 +7,7 @@ const authRoutes = require('./routes/auth')
 const productRoutes = require('./routes/product')
 const categoryRoutes = require('./routes/category')
 const subCategoryRoutes = require('./routes/subCategory')
+const wishListRoutes = require('./routes/wishList')
 
 dotenv.config();
 const app = express();
@@ -19,6 +20,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/product',productRoutes)
 app.use('/api/category',categoryRoutes)
 app.use('/api/subcategory',subCategoryRoutes)
+app.use('/api/wishlist',wishListRoutes)
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
