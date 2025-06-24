@@ -50,7 +50,10 @@ export default function ProductList({ products }) {
 
   return (
     <main style={{ flex: 1, padding: "20px" }}>
-      <div style={{ marginBottom: "20px", display: "flex", gap: "15px" }}>
+      <div style={{   marginBottom: "20px", 
+  display: "flex", 
+  gap: "15px", 
+  justifyContent: "flex-end" }}>
         <button style={styles.button} onClick={handleAddCategory}>
           Add Category
         </button>
@@ -72,13 +75,10 @@ export default function ProductList({ products }) {
         {products.map((product) => (
           <ProductCard key={product._id} product={product} />
         ))}
-       
       </div>
- {
-          products.length === 0 && (
-            <p style={{  textAlign: "center"}}>No Product Found</p>
-          )
-        }
+      {products.length === 0 && (
+        <p style={{ textAlign: "center" }}>No Product Found</p>
+      )}
       <AddCategoryModal
         open={showCategoryModal}
         onClose={handleCloseModal}
@@ -92,7 +92,6 @@ export default function ProductList({ products }) {
       <AddProductModal
         open={showProductModal}
         onClose={handleCloseProductModal}
-
       />
     </main>
   );
