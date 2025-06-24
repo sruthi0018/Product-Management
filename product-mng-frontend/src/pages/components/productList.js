@@ -72,8 +72,13 @@ export default function ProductList({ products }) {
         {products.map((product) => (
           <ProductCard key={product._id} product={product} />
         ))}
+       
       </div>
-
+ {
+          products.length === 0 && (
+            <p style={{  textAlign: "center"}}>No Product Found</p>
+          )
+        }
       <AddCategoryModal
         open={showCategoryModal}
         onClose={handleCloseModal}
@@ -87,9 +92,7 @@ export default function ProductList({ products }) {
       <AddProductModal
         open={showProductModal}
         onClose={handleCloseProductModal}
-        // subCategories={subCategories}
-        // onSubmit={handleProductSubmit}
-        // categories={categories}
+
       />
     </main>
   );

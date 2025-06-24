@@ -48,7 +48,6 @@ export default function AddProductModal({ open, onClose, productId }) {
         description: product.description,
         subCategoryId: product.subCategoryId?._id || "",
         variants: product.variants,
-       
       });
       setImages(product.image || []);
     }
@@ -77,15 +76,15 @@ export default function AddProductModal({ open, onClose, productId }) {
     } else {
       await dispatch(CreateProduct(formData));
       await dispatch(GetAllProducts());
-    
-    reset({
-      title: "",
-      description: "",
-      subCategoryId: "",
-      variants: [{ ram: "", price: "", qty: "" }],
-    });
-    setImages([]);
-  }
+
+      reset({
+        title: "",
+        description: "",
+        subCategoryId: "",
+        variants: [{ ram: "", price: "", qty: "" }],
+      });
+      setImages([]);
+    }
     onClose();
   };
 
@@ -137,7 +136,6 @@ export default function AddProductModal({ open, onClose, productId }) {
               Add Variant
             </button>
 
-      
             <div style={styles.row}>
               <label style={styles.label}>Subcategory</label>
               <select
@@ -153,13 +151,11 @@ export default function AddProductModal({ open, onClose, productId }) {
               </select>
             </div>
 
-   
             <div style={styles.row}>
               <label style={styles.label}>Description</label>
               <textarea {...register("description")} style={styles.textarea} />
             </div>
 
-      
             <div style={styles.row}>
               <label style={styles.label}>Images</label>
               <input
@@ -187,7 +183,6 @@ export default function AddProductModal({ open, onClose, productId }) {
               </div>
             )}
 
-            {/* Actions */}
             <div style={{ ...styles.row, justifyContent: "flex-end" }}>
               <button type="button" onClick={onClose} style={styles.cancel}>
                 Discard
@@ -206,7 +201,7 @@ const styles = {
   scrollArea: {
     padding: 20,
     overflowY: "auto",
-    maxHeight: "70vh", 
+    maxHeight: "70vh",
   },
   imagePreviewRow: {
     display: "flex",

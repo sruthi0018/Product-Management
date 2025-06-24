@@ -93,7 +93,7 @@ export default function SingleProduct() {
         <p style={styles.subCategory}>
           Subcategory: {product?.subCategoryId?.name}
         </p>
-           <p style={{ fontWeight: "bold", fontSize: "18px", margin: "10px 0" }}>
+        <p style={{ fontWeight: "bold", fontSize: "18px", margin: "10px 0" }}>
           Price: ₹{product.variants?.[selectedVariantIndex]?.price ?? "N/A"}
         </p>
 
@@ -148,7 +148,6 @@ export default function SingleProduct() {
           </button>
         </div>
 
-     
         <div style={styles.actions}>
           <button
             style={styles.editBtn}

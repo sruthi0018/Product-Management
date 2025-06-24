@@ -41,7 +41,7 @@ const onSubmit = async (formData) => {
 
   return (
     <div style={{ ...styles.container, flexDirection: isMobile ? 'column' : 'row' }}>
-      {/* Left - Form */}
+ 
       <div style={{ ...styles.leftPanel, width: isMobile ? '100%' : '50%' }}>
         <div style={styles.formBox}>
           <h2 style={styles.title}>Sign In To Your Account</h2>
@@ -67,7 +67,7 @@ const onSubmit = async (formData) => {
         </div>
       </div>
 
-      {/* Right - Image and Text */}
+  
       {!isMobile && (
         <div style={styles.rightPanel}>
           <div style={styles.overlay}>
@@ -83,7 +83,6 @@ const onSubmit = async (formData) => {
   );
 }
 
-// Styles
 const styles = {
   container: {
     display: 'flex',

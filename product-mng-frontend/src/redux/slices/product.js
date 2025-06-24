@@ -73,18 +73,6 @@ export function CreateProduct(data) {
   };
 }
 
-// export function GetAllProducts() {
-//   return async (dispatch) => {
-//     dispatch(slice.actions.startLoading());
-//     try {
-//       const response = await axios.get(`${BASE_URL}/api/product`);
-//       console.log(response, "rrr");
-//       dispatch(slice.actions.getProductsSuccess(response.data));
-//     } catch (error) {
-//       dispatch(slice.actions.hasError(error.message));
-//     }
-//   };
-// }
 export const GetAllProducts = (params) => async (dispatch) => {
  dispatch(slice.actions.startLoading());
   try {
@@ -111,19 +99,19 @@ export function GetProductById(id) {
   };
 }
 
-export function SearchProducts(query) {
-  return async (dispatch) => {
-    dispatch(slice.actions.startLoading());
-    try {
-      const response = await axios.get(
-        `${BASE_URL}/api/products/search/${query}`
-      );
-      dispatch(slice.actions.searchProductSuccess(response.data));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error.message));
-    }
-  };
-}
+// export function SearchProducts(query) {
+//   return async (dispatch) => {
+//     dispatch(slice.actions.startLoading());
+//     try {
+//       const response = await axios.get(
+//         `${BASE_URL}/api/products/search/${query}`
+//       );
+//       dispatch(slice.actions.searchProductSuccess(response.data));
+//     } catch (error) {
+//       dispatch(slice.actions.hasError(error.message));
+//     }
+//   };
+// }
 
 export function UpdateProduct(id, data) {
   return async (dispatch) => {

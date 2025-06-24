@@ -43,7 +43,7 @@ export function CreateCategory(data) {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.post(`${BASE_URL}/api/category`, data);
-      console.log(response.data,"createcat")
+      console.log(response.data, "createcat");
       dispatch(slice.actions.createCategorySuccess(response.data.category));
     } catch (error) {
       dispatch(slice.actions.hasError(error.message));
@@ -64,7 +64,3 @@ export function GetAllCategories() {
     }
   };
 }
-
-
-
-
