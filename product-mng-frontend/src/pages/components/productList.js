@@ -20,7 +20,6 @@ export default function ProductList({ products }) {
   useEffect(() => {
     dispatch(GetWishlist(userId));
   }, [userId,dispatch]);
-
   useEffect(() => {
     dispatch(GetAllCategories());
     dispatch(GetAllSubCategories());
