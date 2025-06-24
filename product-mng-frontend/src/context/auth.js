@@ -1,8 +1,9 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { BASE_URL } from '../constants/constants';
 
-const BASE_URL = "http://localhost:5000";
+// const BASE_URL = "http://localhost:5000";
 
 const AuthContext = createContext();
 
