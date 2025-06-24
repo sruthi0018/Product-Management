@@ -33,7 +33,7 @@ export default function SignupPage() {
     const res = await signup(formData);
     if (res.success) {
       alert("Signup successful");
-      navigate("/home");
+      navigate("/login");
     } else {
       alert(res.message);
     }
