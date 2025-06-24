@@ -1,16 +1,26 @@
 const product = require("../../models/product");
 
+
 exports.getProducts = async (req, res) => {
   try {
     const { search, subCategoryId, page = 1, limit = 10 } = req.query;
     const query = {};
 
-    if (search) query.title = new RegExp(search, "i");
-    if (subCategoryId) query.subCategoryId = subCategoryId;
+    if (search) {
+      query.title = new RegExp(search, "i");
+    }
 
-    const skip = (page - 1) * limit;
+  
+    if (subCategoryId) {
+      const idsArray = subCategoryId.split(',');
+      query.subCategoryId = { $in: idsArray };
+    }
+
     const total = await product.countDocuments(query);
-    const products = await product.find(query).skip(skip).limit(parseInt(limit));
+    const products = await product
+      .find(query)
+      .skip((page - 1) * limit)
+      .limit(parseInt(limit));
 
     res.json({ products, total });
   } catch (err) {
