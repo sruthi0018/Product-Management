@@ -4,27 +4,32 @@ import AddCategoryModal from "./addCategory";
 import { CreateCategory, GetAllCategories } from "../../redux/slices/category";
 import { useDispatch, useSelector } from "react-redux";
 import { AddSubCategoryModal } from "./addSubCategory";
-// import { AddProductModal } from "./addProduct";
-import { GetAllSubCategories } from "../../redux/slices/subCategory";
-import { CreateProduct, GetAllProducts } from "../../redux/slices/product";
-import AddProductModal from "./addProduct";
 
+import { GetAllSubCategories } from "../../redux/slices/subCategory";
+
+import AddProductModal from "./addProduct";
+import { useAuth } from "../../context/auth";
+import { GetWishlist } from "../../redux/slices/wishList";
 
 export default function ProductList({ products }) {
   const dispatch = useDispatch();
+  const { user } = useAuth();
+  console.log(user, "usr");
+  const userId = user?.id;
+
+  useEffect(() => {
+    dispatch(GetWishlist(userId));
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(GetAllCategories());
     dispatch(GetAllSubCategories());
   }, [dispatch]);
   const { categories } = useSelector((state) => state.categories);
-  const { subCategories } = useSelector((state) => state.subCategory);
-
 
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [showSubCategoryModal, setShowSubCategoryModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
-
 
   const handleAddCategory = () => setShowCategoryModal(true);
   const handleAddSubCategory = () => setShowSubCategoryModal(true);
@@ -32,34 +37,19 @@ export default function ProductList({ products }) {
   const handleCloseModal = () => setShowCategoryModal(false);
   const handleCloseSubCatModal = () => setShowSubCategoryModal(false);
   const handleCloseProductModal = () => setShowProductModal(false);
-  
 
   const handleCategorySubmit = async (categoryName) => {
     try {
       console.log("Create category:", categoryName);
       await dispatch(CreateCategory({ name: categoryName }));
-      await     dispatch(GetAllCategories())
-      
+      await dispatch(GetAllCategories());
     } catch (error) {
       console.error("Category creation failed:", error.message);
     }
   };
 
-  const handleProductSubmit = async (data)=>{
-      try {
-      console.log("Create prod", data);
-      await dispatch(CreateProduct(data));
-      await dispatch(GetAllProducts())
-      
-    } catch (error) {
-      console.error("Category creation failed:", error.message);
-    }
-  }
-
-
   return (
     <main style={{ flex: 1, padding: "20px" }}>
-   
       <div style={{ marginBottom: "20px", display: "flex", gap: "15px" }}>
         <button style={styles.button} onClick={handleAddCategory}>
           Add Category
@@ -67,7 +57,9 @@ export default function ProductList({ products }) {
         <button style={styles.button} onClick={handleAddSubCategory}>
           Add Subcategory
         </button>
-        <button style={styles.button} onClick={handleAddProduct}>Add Product</button>
+        <button style={styles.button} onClick={handleAddProduct}>
+          Add Product
+        </button>
       </div>
 
       <div
@@ -93,7 +85,7 @@ export default function ProductList({ products }) {
         categories={categories}
       />
       <AddProductModal
-       open={showProductModal}
+        open={showProductModal}
         onClose={handleCloseProductModal}
         // subCategories={subCategories}
         // onSubmit={handleProductSubmit}

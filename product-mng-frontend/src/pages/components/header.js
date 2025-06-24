@@ -1,15 +1,16 @@
-import React from 'react';
-import { FaHeart, FaShoppingCart, FaUser } from 'react-icons/fa';
+import React, {  useState } from 'react';
+import { FaHeart, FaShoppingCart } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/auth';
+import WishlistSidebar from './wishList';
 
-export default function Header() {
+
+
+
+export default function Header({ onSearch, searchValue }) {
+  const [showWishlist, setShowWishlist] = useState(false);
   const { user, token, logout } = useAuth();
   const navigate = useNavigate();
-
-  const handleSignInClick = () => {
-    navigate('/login');
-  };
 
   const handleLogoutClick = () => {
     logout();
@@ -17,53 +18,52 @@ export default function Header() {
   };
 
   return (
-    <header
-      style={{
-        backgroundColor: '#1e3a8a',
-        color: '#fff',
-        padding: '15px 30px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      }}
-    >
+    <header style={styles.header}>
       <h1>Product Manager</h1>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+      <div style={styles.right}>
         <input
           type="text"
           placeholder="Search products..."
-          style={{
-            padding: '8px',
-            borderRadius: '6px',
-            border: 'none',
-            width: '250px',
-          }}
+          value={searchValue}
+          onChange={(e) => onSearch(e.target.value)}
+          style={styles.input}
         />
-
-        {/* Show heart icon only if logged in */}
-        {token && <FaHeart title="Favorites" style={{ cursor: 'pointer' }} />}
-
-        {/* If logged in, show user's name & logout; else Sign In */}
+        {token && <FaHeart onClick={() => setShowWishlist(true)} style={styles.icon} />}
         {token ? (
           <>
-            <span style={{ fontSize: '14px' }}>{user?.name}</span>
-            <button onClick={handleLogoutClick} style={styles.authButton}>
-              Logout
-            </button>
+            <span>{user?.name}</span>
+            <button onClick={handleLogoutClick} style={styles.authButton}>Logout</button>
           </>
         ) : (
-          <button onClick={handleSignInClick} style={styles.authButton}>
-            Sign In
-          </button>
+          <button onClick={() => navigate('/login')} style={styles.authButton}>Sign In</button>
         )}
-
-        <FaShoppingCart title="Cart" style={{ cursor: 'pointer' }} />
+        <FaShoppingCart style={styles.icon} />
       </div>
+      <WishlistSidebar isOpen={showWishlist} onClose={() => setShowWishlist(false)} />
     </header>
   );
 }
 
 const styles = {
+  header: {
+    backgroundColor: '#1e3a8a',
+    color: '#fff',
+    padding: '15px 30px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  right: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '15px',
+  },
+  input: {
+    padding: '8px',
+    borderRadius: '6px',
+    border: '1px solid #ccc',
+    width: '250px',
+  },
   authButton: {
     background: '#facc15',
     color: '#000',
@@ -72,5 +72,8 @@ const styles = {
     borderRadius: '6px',
     cursor: 'pointer',
     fontWeight: 'bold',
+  },
+  icon: {
+    cursor: 'pointer',
   },
 };

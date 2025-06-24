@@ -57,7 +57,7 @@ export function AddSubCategoryModal({ open, onClose, categories }) {
           {errors.name && <p style={styles.error}>{errors.name.message}</p>}
 
           <div style={styles.actions}>
-            <button type="button" onClick={onClose} style={styles.cancel}>Cancel</button>
+            <button type="button" onClick={onClose} style={styles.cancel}>Discard</button>
             <button type="submit" style={styles.submit}>Add</button>
           </div>
         </form>
@@ -72,6 +72,12 @@ const styles = {
   modal: { background: '#fff', padding: 20, borderRadius: 10, width: 300, margin: '100px auto' },
   input: { width: '90%', padding: 10, margin: '10px 0', borderRadius: 6, border: '1px solid #ccc' },
   actions: { display: 'flex', justifyContent: 'flex-end', gap: 10 },
-  cancel: { padding: '6px 12px' },
+  cancel: {
+    padding: "8px 16px",
+    backgroundColor: "#ccc",
+    border: "none",
+    borderRadius: 6,
+    cursor: "pointer",
+  },
   submit: { padding: '6px 12px', backgroundColor: '#facc15', border: 'none', borderRadius: 6 }
 };

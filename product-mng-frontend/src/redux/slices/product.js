@@ -6,6 +6,7 @@ const BASE_URL = "http://localhost:5000";
 const initialState = {
   isLoading: false,
   error: null,
+     total: 0,
   product: null,
   products: [],
 };
@@ -25,10 +26,12 @@ const slice = createSlice({
       state.isLoading = false;
       state.products.push(action.payload);
     },
-    getProductsSuccess(state, action) {
-      state.isLoading = false;
-      state.products = action.payload;
-    },
+ getProductsSuccess(state, action) {
+  state.isLoading = false;
+  state.products = action.payload.products; 
+  state.total = action.payload.total;
+},
+
     getProductSuccess(state, action) {
       state.isLoading = false;
       state.product = action.payload;
@@ -70,18 +73,29 @@ export function CreateProduct(data) {
   };
 }
 
-export function GetAllProducts() {
-  return async (dispatch) => {
-    dispatch(slice.actions.startLoading());
-    try {
-      const response = await axios.get(`${BASE_URL}/api/product`);
-      console.log(response, "rrr");
-      dispatch(slice.actions.getProductsSuccess(response.data));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error.message));
-    }
-  };
-}
+// export function GetAllProducts() {
+//   return async (dispatch) => {
+//     dispatch(slice.actions.startLoading());
+//     try {
+//       const response = await axios.get(`${BASE_URL}/api/product`);
+//       console.log(response, "rrr");
+//       dispatch(slice.actions.getProductsSuccess(response.data));
+//     } catch (error) {
+//       dispatch(slice.actions.hasError(error.message));
+//     }
+//   };
+// }
+export const GetAllProducts = (params) => async (dispatch) => {
+ dispatch(slice.actions.startLoading());
+  try {
+    const response = await axios.get(`${BASE_URL}/api/product`, { params });
+    console.log("gtp",response)
+ dispatch(slice.actions.getProductsSuccess(response.data));
+  } catch (error) {
+   dispatch(slice.actions.hasError(error.message));
+  }
+};
+
 
 export function GetProductById(id) {
   console.log("iddd",id)

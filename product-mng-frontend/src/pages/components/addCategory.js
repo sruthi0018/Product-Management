@@ -39,7 +39,7 @@ export default function AddCategoryModal({ open, onClose, onSubmit }) {
             <p style={styles.error}>{errors.category.message}</p>
           )}
           <div style={styles.actions}>
-            <button type="button" onClick={() => { reset(); onClose(); }} style={styles.cancel}>Cancel</button>
+            <button type="button" onClick={() => { reset(); onClose(); }} style={styles.cancel}>Discard</button>
             <button type="submit" style={styles.submit}>Add</button>
           </div>
         </form>

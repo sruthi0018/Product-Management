@@ -2,8 +2,7 @@ const WishList = require("../../models/wishList");
 
 exports.toggleWishlist = async (req, res) => {
   try {
-    const userId = req.user._id;
-    const { productId } = req.params;
+ const { userId, productId } = req.params;
 
     let wishlist = await WishList.findOne({ userId });
 
@@ -14,8 +13,9 @@ exports.toggleWishlist = async (req, res) => {
         productIds: [productId]
       });
     } else {
-   
-      const index = wishlist.productIds.indexOf(productId);
+      const index = wishlist.productIds.findIndex(
+        (id) => id.toString() === productId
+      );
       if (index > -1) {
         wishlist.productIds.splice(index, 1); // Remove
       } else {
