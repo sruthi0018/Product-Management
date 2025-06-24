@@ -17,9 +17,12 @@ export default function ProductList({ products }) {
   console.log(user, "usr");
   const userId = user?.id;
 
-  useEffect(() => {
+useEffect(() => {
+  if (userId) {
     dispatch(GetWishlist(userId));
-  }, [userId,dispatch]);
+  }
+}, [userId, dispatch]);
+  
   useEffect(() => {
     dispatch(GetAllCategories());
     dispatch(GetAllSubCategories());
